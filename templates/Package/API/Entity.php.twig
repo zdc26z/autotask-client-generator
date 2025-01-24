@@ -9,13 +9,8 @@ use {{ import }};
 /**
  * Represents {{ entityName.singular }} entities.
  */
-class {{ entityName.singular }}Entity extends DataTransferObject
+class {{ entityName.singular }}Entity extends Entity
 {
-{% for field in fields %}
-    public {% if (field.isRequired != true and field.dataType != 'null') or (field.name == 'paymentTerms') or (field.name == 'quantityNowReceiving') -%}?{%- endif -%}{%- if field.dataType != 'null' %}{{- field.dataType }} {% endif %}${{ field.name -}};
-{%~ endfor %}
-    /** @var \Anteris\Autotask\Support\UserDefinedFields\UserDefinedFieldEntity[]|null */
-    public ?array $userDefinedFields;
 
     /**
      * Creates a new {{ entityName.singular }} entity.
@@ -23,17 +18,14 @@ class {{ entityName.singular }}Entity extends DataTransferObject
      *
      * @author Aidan Casey <aidan.casey@anteris.com>
      */
-    public function __construct(array $array)
+    public function __construct(
+    {% for field in fields %}
+        public {% if (field.isRequired != true and field.dataType != 'null') or (field.name == 'paymentTerms') or (field.name == 'quantityNowReceiving') -%}?{%- endif -%}{%- if field.dataType != 'null' %}{{- field.dataType }} {% endif %}${{ field.name -}};
+    {%~ endfor %}
+        #[CastListToType(UserDefinedFieldEntity::class)]
+        public ?array $userDefinedFields;
+    )
     {
-{%- for field in fields -%}
-    {%~ if field.dataType == 'Carbon' ~%}
-        if (isset($array['{{- field.name -}}'])) {
-            $array['{{- field.name -}}'] = new Carbon($array['{{- field.name -}}']);
-        }
-    {%~ else -%}
-    {% endif -%}
-{% endfor ~%}
-        parent::__construct($array);
     }
 
     /**
@@ -51,6 +43,11 @@ class {{ entityName.singular }}Entity extends DataTransferObject
             throw new \Exception('Missing item key in response.');
         }
 
-        return new self($responseArray['item']);
+        $mapper = new ObjectMapperUsingReflection(
+            new DefinitionProvider(
+                keyFormatter: new KeyFormatterWithoutConversion(),
+            ),
+        );
+        return $mapper->hydrateObject(self::class, $responseArray['item']);
     }
 }

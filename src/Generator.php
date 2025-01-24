@@ -125,6 +125,19 @@ class Generator
     }
 
     /**
+     * Makes the base Entity class that all others extend.
+     */
+    public function makeBaseEntity(): void
+    {
+        $writer = $this->templateWriter->newContext();
+        $writer->createAndEnterDirectory('src/API');
+        $writer->createFileFromTemplate(
+            'Entity.php',
+            'Package/API/BaseEntity.php.twig'
+        );
+    }
+
+    /**
      * Make the resource files required by the passed entity.
      * 
      * @author Aidan Casey <aidan.casey@anteris.com>

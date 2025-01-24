@@ -4,24 +4,28 @@ namespace Anteris\Autotask\Generator\Responses\EntityInformation;
 
 use Exception;
 use GuzzleHttp\Psr7\Response;
-use Spatie\DataTransferObject\DataTransferObject;
+use EventSauce\ObjectHydrator\DefinitionProvider;
+use EventSauce\ObjectHydrator\KeyFormatterWithoutConversion;
+use EventSauce\ObjectHydrator\ObjectMapperUsingReflection;
 
 /**
  * Represents an entity information response from Autotask.
  */
-class EntityInformationDTO extends DataTransferObject
+class EntityInformationDTO
 {
-    public string $name;
-    public bool $canCreate;
-    public bool $canDelete;
-    public bool $canQuery;
-    public bool $canUpdate;
-    public string $userAccessForCreate;
-    public string $userAccessForDelete;
-    public string $userAccessForQuery;
-    public string $userAccessForUpdate;
-    public bool $hasUserDefinedFields;
-    public bool $supportsWebhookCallouts;
+    public function __construct(
+        public string $name,
+        public bool $canCreate,
+        public bool $canDelete,
+        public bool $canQuery,
+        public bool $canUpdate,
+        public string $userAccessForCreate,
+        public string $userAccessForDelete,
+        public string $userAccessForQuery,
+        public string $userAccessForUpdate,
+        public bool $hasUserDefinedFields,
+        public bool $supportsWebhookCallouts,
+    ) {}
 
     public static function fromResponse(Response $httpResponse): EntityInformationDTO
     {
@@ -31,6 +35,11 @@ class EntityInformationDTO extends DataTransferObject
             throw new Exception('Invalid response from entityInformation!');
         }
 
-        return new static($response['info']);
+        $mapper = new ObjectMapperUsingReflection(
+            new DefinitionProvider(
+                keyFormatter: new KeyFormatterWithoutConversion(),
+            ),
+        );
+        return $mapper->hydrateObject(self::class, $response['info']);
     }
 }

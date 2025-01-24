@@ -3,13 +3,12 @@
 namespace Anteris\Autotask\Generator\Support\Entities;
 
 use Anteris\Autotask\Generator\Helpers\Str;
-use Spatie\DataTransferObject\DataTransferObject;
 
 /**
  * This data transfer object represents an entity name. It contains plural and
  * singular forms of the name for use throughout the generator.
  */
-class EntityNameDTO extends DataTransferObject
+class EntityNameDTO
 {
     public string $plural;
     public string $pluralSnake;
@@ -22,14 +21,14 @@ class EntityNameDTO extends DataTransferObject
     public function __construct($parameters)
     {
         if (isset($parameters['plural'])) {
-            $parameters['pluralSnake'] = Str::snake($parameters['plural']);
+            $this->plural = $parameters['plural'];
+            $this->pluralSnake = Str::snake($parameters['plural']);
         }
 
         if (isset($parameters['singular'])) {
-            $parameters['singularSnake'] = Str::snake($parameters['singular']);
+            $this->singular = $parameters['singular'];
+            $this->singularSnake = Str::snake($parameters['singular']);
         }
-
-        parent::__construct($parameters);
     }
 
     /**

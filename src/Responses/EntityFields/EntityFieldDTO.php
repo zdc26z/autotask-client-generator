@@ -2,94 +2,129 @@
 
 namespace Anteris\Autotask\Generator\Responses\EntityFields;
 
+use Attribute;
+use Illuminate\Support\Collection;
 use Anteris\Autotask\Generator\Helpers\Str;
-use Spatie\DataTransferObject\DataTransferObject;
+use EventSauce\ObjectHydrator\ObjectMapper;
+use EventSauce\ObjectHydrator\PropertyCaster;
+use EventSauce\ObjectHydrator\DefinitionProvider;
+use EventSauce\ObjectHydrator\KeyFormatterWithoutConversion;
+use EventSauce\ObjectHydrator\ObjectMapperUsingReflection;
 
 /**
  * Represents an entity field response from Autotask.
  */
-class EntityFieldDTO extends DataTransferObject
+class EntityFieldDTO
 {
-    public string $name;
-    public string $dataType;
-    public int $length;
-    public bool $isRequired;
-    public bool $isReadOnly;
-    public bool $isQueryable;
-    public bool $isReference;
-    public string $referenceEntityType;
-    public bool $isPickList;
-    public ?array $picklistValues;
-    public ?string $picklistParentValueField;
-    public bool $isSupportedWebhookField;
 
     /**
      * Overrides the default construct to fix some problems.
      */
-    public function __construct(array $parameters = [])
+    public function __construct(
+        #[CastName]
+        public string $name,
+        #[CastDataType]
+        public string $dataType,
+        public int $length,
+        public bool $isRequired,
+        public bool $isReadOnly,
+        public bool $isQueryable,
+        public bool $isReference,
+        public string $referenceEntityType,
+        public bool $isPickList,
+        public ?array $picklistValues,
+        public ?string $picklistParentValueField,
+        public bool $isSupportedWebhookField,
+    )
     {
-        // Convert Autotask types to PHP types
-        if (isset($parameters['dataType'])) {
-            switch ($parameters['dataType']) {
-                case 'datetime':
-                    $parameters['dataType'] = 'Carbon';
-                    break;
-                case 'integer':
-                    $parameters['dataType'] = 'int';
-                    break;
-                case 'boolean':
-                    $parameters['dataType'] = 'bool';
-                    break;
-                case 'byte[]':
-                    $parameters['dataType'] = 'null';
-                    $parameters['required'] = false;
-                    break;
-                case 'long':
-                case 'short':
-                    $parameters['dataType'] = 'null';
-                    break;
-                case 'double':
-                case 'decimal':
-                    $parameters['dataType'] = 'float';
-                    break;
-            }
+        if('null' === $this->dataType) {
+            $this->isRequired = false;
         }
 
-        if (isset($parameters['name']) && $parameters['name'] == 'ContractID') {
-            $parameters['dataType'] = 'int';
+        if('ContractID' === $this->name) {
+            $this->dataType = 'int';
+        }
+    }
+
+    public static function arrayOf(array $items): Collection
+    {
+        $mapper = new ObjectMapperUsingReflection(
+            new DefinitionProvider(
+                keyFormatter: new KeyFormatterWithoutConversion(),
+            ),
+        );
+
+        $collection = Collection::empty();
+        foreach($items as $item) {
+            $field = $mapper->hydrateObject(static::class, $item);
+            $collection->push( $mapper->hydrateObject(static::class, $item) );
         }
 
-        // This is a terrible block of code to deal with weird camel cased words
-        if (isset($parameters['name'])) {
-            $weirdWords = [
-                'GLCode'    => 'glCode',
-                'MSRP'      => 'msrp',
-                'RMM'       => 'rmm',
-                'SGDA'      => 'sgda',
-                'SIC'       => 'sic',
-                'SKU'       => 'sku',
-            ];
+        return $collection;
+    }
+}
 
-            foreach ($weirdWords as $original => $fixed) {
-                if ($parameters['name'] == $original) {
-                    $parameters['name'] = $fixed;
-                    continue;
-                }
+#[Attribute(Attribute::TARGET_PARAMETER)]
+class CastName implements PropertyCaster
+{
+    public function __construct() {}
 
-                if (substr($parameters['name'], 0, strlen($original)) !== $original) {
-                    continue;
-                }
+    public function cast(mixed $value, ObjectMapper $mapper): mixed
+    {
+        $weirdWords = [
+            'GLCode'    => 'glCode',
+            'MSRP'      => 'msrp',
+            'RMM'       => 'rmm',
+            'SGDA'      => 'sgda',
+            'SIC'       => 'sic',
+            'SKU'       => 'sku',
+        ];
 
-                $parameters['name'] = Str::replaceFirst(
-                    $original,
-                    $fixed,
-                    $parameters['name']
-                );
+        foreach ($weirdWords as $original => $fixed) {
+            if($original === $value) {
+                $value = $fixed;
+                continue;
             }
 
-            $parameters['name'] = Str::camel($parameters['name']);
+            if(substr($value, 0, strlen($original)) !== $original) {
+                continue;
+            }
+
+            $value = Str::replaceFirst(
+                $original,
+                $fixed,
+                $value
+            );
         }
 
-        parent::__construct($parameters);
+        return Str::camel($value);
+    }
+}
+
+#[Attribute(Attribute::TARGET_PARAMETER)]
+class CastDataType implements PropertyCaster
+{
+    public function __construct()
+    {}
+
+    public function cast(mixed $value, ObjectMapper $mapper): mixed
+    {
+        switch($value) {
+            case 'datetime':
+                return 'Carbon';
+            case 'integer':
+                return 'int';
+            case 'boolean':
+                return 'bool';
+            case 'byte[]':
+            case 'long':
+            case 'short':
+                return 'null';
+            case 'double':
+            case 'decimal':
+                return 'float';
+            default:
+                return $value;
+        }
     }
 }

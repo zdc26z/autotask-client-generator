@@ -36,6 +36,8 @@ class MakeEndpointCommand extends AbstractMakeCommand
         $this->setupEnvironment($input, $output);
 
         try {
+            $output->writeln('Generating Entity base class');
+            $this->generator->makeBaseEntity();
             $output->writeln('Generating classes for ' . $input->getArgument('entity'));
             $this->generator->makeResource($input->getArgument('entity'));
         } catch (\Exception $error) {

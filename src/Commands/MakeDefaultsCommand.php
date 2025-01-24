@@ -37,6 +37,8 @@ class MakeDefaultsCommand extends AbstractMakeCommand
         $endpoints = Api::endpoints();
 
         try {
+            $output->writeln('Generating Entity base class');
+            $this->generator->makeBaseEntity();
             foreach ($endpoints as $service) {
                 $output->writeln('Generating classes for ' . $service);
                 $this->generator->makeResource($service);

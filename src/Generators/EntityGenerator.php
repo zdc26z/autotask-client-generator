@@ -30,7 +30,11 @@ class EntityGenerator
     {
         $imports = [
             'GuzzleHttp\Psr7\Response',
-            'Spatie\DataTransferObject\DataTransferObject',
+            'Anteris\Autotask\API\Entity',
+            'EventSauce\ObjectHydrator\DefinitionProvider',
+            'EventSauce\ObjectHydrator\KeyFormatterWithoutConversion',
+            'EventSauce\ObjectHydrator\ObjectMapperUsingReflection',
+            'EventSauce\ObjectHydrator\PropertyCasters\CastListToType',
         ];
 
         foreach ($fields as $field) {

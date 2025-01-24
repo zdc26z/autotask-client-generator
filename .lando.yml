@@ -1,0 +1,11 @@
+name: autogen
+recipe: lamp
+config:
+  webroot: .
+  php: 8.3
+tooling:
+  composer:
+    service: appserver
+  autotask:
+    service: appserver
+    cmd: bin/autotask

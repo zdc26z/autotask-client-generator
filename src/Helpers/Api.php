@@ -26,7 +26,8 @@ class Api
                 str_contains($path, 'Modules') ||
                 str_contains($path, 'ThresholdInformation') ||
                 str_contains($path, 'Version') ||
-                str_contains($path, 'ZoneInformation')
+                str_contains($path, 'ZoneInformation') ||
+                str_contains($path, 'Authenticate')
             ) {
                 continue;
             }
