@@ -57,7 +57,7 @@ class EntityFieldDTO
         $collection = Collection::empty();
         foreach($items as $item) {
             $field = $mapper->hydrateObject(static::class, $item);
-            $collection->push( $mapper->hydrateObject(static::class, $item) );
+            $collection->push( $field );
         }
 
         return $collection;
@@ -113,11 +113,11 @@ class CastDataType implements PropertyCaster
             case 'datetime':
                 return 'Carbon';
             case 'integer':
+            case 'long':
                 return 'int';
             case 'boolean':
                 return 'bool';
             case 'byte[]':
-            case 'long':
             case 'short':
                 return 'null';
             case 'double':
