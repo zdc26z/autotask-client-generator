@@ -5,10 +5,10 @@ namespace Anteris\Autotask\Generator\Helpers;
 use Attribute;
 use Carbon\Carbon;
 use EventSauce\ObjectHydrator\ObjectMapper;
-use EventSauce\ObjectHydrator\ProperytCaster;
+use EventSauce\ObjectHydrator\PropertyCaster;
 
 #[Attribute(Attribute::TARGET_PARAMETER)]
-class CastCarbor implements PropertyCaster
+class CastCarbon implements PropertyCaster
 {
     public function __construct()
     {}
