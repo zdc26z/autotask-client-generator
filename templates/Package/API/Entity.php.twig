@@ -19,11 +19,13 @@ class {{ entityName.singular }}Entity extends Entity
      * @author Aidan Casey <aidan.casey@anteris.com>
      */
     public function __construct(
-    {% for field in fields %}
-        public {% if (field.isRequired != true and field.dataType != 'null') or (field.name == 'paymentTerms') or (field.name == 'quantityNowReceiving') -%}?{%- endif -%}{%- if field.dataType != 'null' %}{{- field.dataType }} {% endif %}${{ field.name -}};
-    {%~ endfor %}
+        {% for field in fields|sort((a,b) => a.isRequired and b.isRequired ? 0 : b.isRequired) %}
+        {%- if (field.dataType == 'Carbon' or field.dataType == '?Carbon') %}#[CastCarbon]
+        {% endif -%}
+            public {% if field.dataType != 'null' %}{{ field.dataType }}{% endif %} ${{ field.name -}}, 
+        {%~ endfor %}
         #[CastListToType(UserDefinedFieldEntity::class)]
-        public ?array $userDefinedFields;
+        public array $userDefinedFields = [],
     )
     {
     }

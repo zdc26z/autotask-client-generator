@@ -81,5 +81,14 @@ class SupportGenerator
             'AbstractTest.php',
             'Tests/AbstractTest.php.twig'
         );
+        $this->writer->createAndEnterDirectory('Mocks');
+        $this->writer->createFileFromTemplate(
+            'ClientMock.php',
+            'Tests/Mocks/ClientMock.php.twig'
+        );
+        $this->writer->createFileFromTemplate(
+            'HttpClientMock.php',
+            'Tests/Mocks/HttpClientMock.php.twig'
+        );
     }
 }

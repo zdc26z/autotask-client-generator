@@ -39,6 +39,10 @@ class ClientGenerator
         $services = [];
 
         foreach ($files as $filename => $fileDetails) {
+            if(str_contains($filename, 'vendor')) {
+                continue;
+            }
+
             $filename = pathinfo($filename, PATHINFO_FILENAME);
             if (substr($filename, -strlen('Service')) === 'Service') {
                 $name = substr($filename, 0, -strlen('Service'));

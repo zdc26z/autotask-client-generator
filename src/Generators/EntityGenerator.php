@@ -31,6 +31,7 @@ class EntityGenerator
         $imports = [
             'GuzzleHttp\Psr7\Response',
             'Anteris\Autotask\API\Entity',
+            'Anteris\Autotask\Support\UserDefinedFields\UserDefinedFieldEntity',
             'EventSauce\ObjectHydrator\DefinitionProvider',
             'EventSauce\ObjectHydrator\KeyFormatterWithoutConversion',
             'EventSauce\ObjectHydrator\ObjectMapperUsingReflection',
@@ -38,8 +39,9 @@ class EntityGenerator
         ];
 
         foreach ($fields as $field) {
-            if ($field->dataType === 'Carbon') {
+            if ($field->dataType === 'Carbon' || $field->dataType === '?Carbon') {
                 $imports[] = 'Carbon\Carbon';
+                $imports[] = 'Anteris\Autotask\Generator\Helpers\CastCarbon';
                 break;
             }
         }

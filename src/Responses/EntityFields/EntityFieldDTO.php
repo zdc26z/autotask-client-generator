@@ -16,7 +16,6 @@ use EventSauce\ObjectHydrator\ObjectMapperUsingReflection;
  */
 class EntityFieldDTO
 {
-
     /**
      * Overrides the default construct to fix some problems.
      */
@@ -37,12 +36,12 @@ class EntityFieldDTO
         public bool $isSupportedWebhookField,
     )
     {
-        if('null' === $this->dataType) {
-            $this->isRequired = false;
-        }
-
         if('ContractID' === $this->name) {
             $this->dataType = 'int';
+        }
+
+        if('null' === $this->dataType) {
+            $this->isRequired = false;
         }
     }
 
@@ -57,7 +56,7 @@ class EntityFieldDTO
         $collection = Collection::empty();
         foreach($items as $item) {
             $field = $mapper->hydrateObject(static::class, $item);
-            $collection->push( $mapper->hydrateObject(static::class, $item) );
+            $collection->push( $field );
         }
 
         return $collection;
@@ -111,20 +110,20 @@ class CastDataType implements PropertyCaster
     {
         switch($value) {
             case 'datetime':
-                return 'Carbon';
+                return '?Carbon';
             case 'integer':
-                return 'int';
+                return '?int';
             case 'boolean':
-                return 'bool';
+                return '?bool';
             case 'byte[]':
-            case 'long':
             case 'short':
-                return 'null';
+                return 'mixed';
             case 'double':
             case 'decimal':
-                return 'float';
+            case 'long':
+                return '?float';
             default:
-                return $value;
+                return '?' . $value;
         }
     }
 }
