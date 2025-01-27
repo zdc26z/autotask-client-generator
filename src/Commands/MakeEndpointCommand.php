@@ -41,7 +41,6 @@ class MakeEndpointCommand extends AbstractMakeCommand
             $output->writeln('Generating classes for ' . $input->getArgument('entity'));
             $this->generator->makeResource($input->getArgument('entity'));
         } catch (\Exception $error) {
-            var_dump($error);
             $output->writeln(
                 '<error>There was an error creating that endpoint: ' .
                 $error->getMessage() .

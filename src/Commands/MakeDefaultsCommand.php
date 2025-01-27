@@ -44,6 +44,7 @@ class MakeDefaultsCommand extends AbstractMakeCommand
                 $this->generator->makeResource($service);
             }
         } catch (\Exception $error) {
+            var_dump($error);
             $output->writeln(
                 '<error>There was an error creating that endpoint: ' .
                 $error->getMessage() .
