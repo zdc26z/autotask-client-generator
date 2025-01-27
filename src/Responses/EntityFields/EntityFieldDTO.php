@@ -16,7 +16,7 @@ use EventSauce\ObjectHydrator\ObjectMapperUsingReflection;
  */
 class EntityFieldDTO
 {
-    public string $default = '\'\'';
+    public string $default = "''";
 
     /**
      * Overrides the default construct to fix some problems.
