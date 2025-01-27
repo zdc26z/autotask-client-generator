@@ -20,6 +20,7 @@ class {{ entityName.singular }}Entity extends Entity
      */
     public function __construct(
     {% for field in fields %}
+        {% if (field.dataType == 'Carbon') %}#[CastCarbon]{% endif %}
         public {% if (field.isRequired != true and field.dataType != 'null') or (field.name == 'paymentTerms') or (field.name == 'quantityNowReceiving') -%}?{%- endif -%}{%- if field.dataType != 'null' %}{{- field.dataType }} {% endif %}${{ field.name -}},
     {%~ endfor %}
         #[CastListToType(UserDefinedFieldEntity::class)]
