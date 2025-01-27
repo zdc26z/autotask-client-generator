@@ -22,7 +22,7 @@ class {{ entityName.singular }}Entity extends Entity
     {% for field in fields %}
         {% if (field.dataType == 'Carbon') %}#[CastCarbon]
         {% endif %}
-        public {% if (field.isRequired != true and field.dataType != 'null') or (field.name == 'paymentTerms') or (field.name == 'quantityNowReceiving') -%}?{%- endif -%}{%- if field.dataType != 'null' %}{{- field.dataType }} {% endif %}${{ field.name -}},
+        public {%- if field.dataType != 'null' %}{{- field.dataType }} {% endif %}${{ field.name -}} {%- if !field.isRequired %}= {{- field.default }}%{% endif %}, 
     {%~ endfor %}
         #[CastListToType(UserDefinedFieldEntity::class)]
         public ?array $userDefinedFields,

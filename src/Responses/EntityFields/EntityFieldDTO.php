@@ -16,6 +16,7 @@ use EventSauce\ObjectHydrator\ObjectMapperUsingReflection;
  */
 class EntityFieldDTO
 {
+    public string $default = "''";
 
     /**
      * Overrides the default construct to fix some problems.
@@ -39,6 +40,15 @@ class EntityFieldDTO
     {
         if('null' === $this->dataType) {
             $this->isRequired = false;
+        } else {
+            switch($this->dataType) {
+                case 'bool':
+                    $this->default = 'false';
+                    break;
+                case 'array':
+                    $this->default = '[]';
+                    break;
+            }
         }
 
         if('ContractID' === $this->name) {
