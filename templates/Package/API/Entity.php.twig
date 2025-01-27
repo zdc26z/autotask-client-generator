@@ -25,7 +25,7 @@ class {{ entityName.singular }}Entity extends Entity
         public {%- if field.dataType != 'null' %}{{- field.dataType }} {% endif %}${{ field.name -}} {%- if field.isRequired == false %} = {{- field.default }}{% endif %}, 
     {%~ endfor %}
         #[CastListToType(UserDefinedFieldEntity::class)]
-        public ?array $userDefinedFields,
+        public array $userDefinedFields = [],
     )
     {
     }
