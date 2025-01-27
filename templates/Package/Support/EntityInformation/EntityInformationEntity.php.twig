@@ -4,24 +4,25 @@ namespace Anteris\Autotask\Support\EntityInformation;
 
 use Exception;
 use GuzzleHttp\Psr7\Response;
-use Spatie\DataTransferObject\DataTransferObject;
 
 /**
  * Represents an entity information response from Autotask.
  */
-class EntityInformationEntity extends DataTransferObject
+class EntityInformationEntity
 {
-    public string $name;
-    public bool $canCreate;
-    public bool $canDelete;
-    public bool $canQuery;
-    public bool $canUpdate;
-    public string $userAccessForCreate;
-    public string $userAccessForDelete;
-    public string $userAccessForQuery;
-    public string $userAccessForUpdate;
-    public bool $hasUserDefinedFields;
-    public bool $supportsWebhookCallouts;
+    public __construct(
+        public string $name,
+        public bool $canCreate,
+        public bool $canDelete,
+        public bool $canQuery,
+        public bool $canUpdate,
+        public string $userAccessForCreate,
+        public string $userAccessForDelete,
+        public string $userAccessForQuery,
+        public string $userAccessForUpdate,
+        public bool $hasUserDefinedFields,
+        public bool $supportsWebhookCallouts,
+    ) {}
 
     /**
      * Creates a new EntityInformationEntity from an http response.
