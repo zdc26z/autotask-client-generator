@@ -5,10 +5,10 @@
         "symfony/console": "^5.1",
         "twig/twig": "^3.0",
         "guzzlehttp/guzzle": "^6.3|^7.0",
-        "illuminate/support": "^9.0",
+        "illuminate/support": "^11.40",
         "phpoption/phpoption": "^1.7",
         "vlucas/phpdotenv": "^5.1",
-        "illuminate/collections": "^9.19",
+        "illuminate/collections": "^11.40",
         "ext-json": "*",
         "eventsauce/object-hydrator": "^1.6"
     },
