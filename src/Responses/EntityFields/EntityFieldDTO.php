@@ -16,7 +16,7 @@ use EventSauce\ObjectHydrator\ObjectMapperUsingReflection;
  */
 class EntityFieldDTO
 {
-    public string $default = "''";
+    public string $default = '\'\'';
 
     /**
      * Overrides the default construct to fix some problems.
@@ -47,6 +47,9 @@ class EntityFieldDTO
                     break;
                 case 'array':
                     $this->default = '[]';
+                    break;
+                case 'Carbon':
+                    $this->default = 'new Carbon()';
                     break;
             }
         }
