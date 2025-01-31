@@ -74,6 +74,14 @@ class SupportGenerator
             'Package/Support/UserDefinedFields/UserDefinedFieldEntity.php.twig'
         );
 
+        // Carbon Caster (for ObjectHydrator)
+        $this->writer->resetContext();
+        $this->writer->createAndEnterDirectory('src/Support');
+        $this->writer->createFileFromTemplate(
+            'CastCarbon.php',
+            'Package/Support/CastCarbon.php.twig'
+        );
+
         // Test Dependencies
         $this->writer->resetContext();
         $this->writer->createAndEnterDirectory('tests');

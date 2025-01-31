@@ -41,7 +41,7 @@ class EntityGenerator
         foreach ($fields as $field) {
             if ($field->dataType === 'Carbon' || $field->dataType === '?Carbon') {
                 $imports[] = 'Carbon\Carbon';
-                $imports[] = 'Anteris\Autotask\Generator\Helpers\CastCarbon';
+                $imports[] = 'Anteris\Autotask\Support\CastCarbon';
                 break;
             }
         }
