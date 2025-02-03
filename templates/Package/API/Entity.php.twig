@@ -20,9 +20,9 @@ class {{ entityName.singular }}Entity extends Entity
      */
     public function __construct(
         {% for field in fields|sort((a,b) => a.isRequired and b.isRequired ? 0 : b.isRequired) %}
-        {%- if (field.dataType == 'Carbon' or field.dataType == '?Carbon') %}#[CastCarbon]
+        {% if (field.dataType == 'Carbon' or field.dataType == '?Carbon') %}#[CastCarbon]
         {% endif -%}
-            public {% if field.dataType != 'null' %}{{ field.dataType }}{% endif %} ${{ field.name -}}, 
+        public {% if field.dataType != 'null' %}{{ field.dataType }}{% endif %} ${{ field.name }} = null,
         {%~ endfor %}
         #[CastListToType(UserDefinedFieldEntity::class)]
         public array $userDefinedFields = [],
