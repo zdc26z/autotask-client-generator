@@ -2,10 +2,12 @@
 
 namespace Anteris\Autotask\Support\EntityFields;
 
+use Anteris\Autotask\API\Entity;
+
 /**
  * Represents an entity field response from Autotask.
  */
-class EntityFieldEntity
+class EntityFieldEntity extends Entity
 {
     public function __construct(
         public string $name,

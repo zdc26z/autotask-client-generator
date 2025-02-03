@@ -2,10 +2,12 @@
 
 namespace Anteris\Autotask\Support\EntityUserDefinedFields;
 
+use Anteris\Autotask\API\Entity;
+
 /**
  * Represents an entity user defined field response from Autotask.
  */
-class EntityUserDefinedFieldEntity
+class EntityUserDefinedFieldEntity extends Entity
 {
     public function __construct(
         public string $name,

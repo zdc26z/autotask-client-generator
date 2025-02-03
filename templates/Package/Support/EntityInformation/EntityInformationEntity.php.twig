@@ -4,11 +4,12 @@ namespace Anteris\Autotask\Support\EntityInformation;
 
 use Exception;
 use GuzzleHttp\Psr7\Response;
+use Anteris\Autotask\API\Entity;
 
 /**
  * Represents an entity information response from Autotask.
  */
-class EntityInformationEntity
+class EntityInformationEntity extends Entity
 {
     public __construct(
         public string $name,
