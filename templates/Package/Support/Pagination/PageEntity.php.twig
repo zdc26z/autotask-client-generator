@@ -32,6 +32,6 @@ class PageEntity
             throw new Exception('Missing pageDetails key in response!');
         }
 
-        return new static($array['pageDetails']);
+        return new static(...$array['pageDetails']);
     }
 }

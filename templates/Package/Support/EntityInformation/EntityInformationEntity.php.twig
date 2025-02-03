@@ -11,7 +11,7 @@ use Anteris\Autotask\API\Entity;
  */
 class EntityInformationEntity extends Entity
 {
-    public __construct(
+    public function __construct(
         public string $name,
         public bool $canCreate,
         public bool $canDelete,
@@ -40,6 +40,6 @@ class EntityInformationEntity extends Entity
             throw new Exception('Missing info key in response!');
         }
 
-        return new static($array['info']);
+        return new static(...$array['info']);
     }
 }
