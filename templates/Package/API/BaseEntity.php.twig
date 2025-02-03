@@ -11,7 +11,7 @@ use EventSauce\ObjectHydrator\ObjectMapperUsingReflection;
 
 class Entity
 {
-    public function all(): array()
+    public function all(): array
     {
         $data = [];
         $class = new ReflectionClass(static::class);
