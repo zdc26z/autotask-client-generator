@@ -10,7 +10,7 @@ use GuzzleHttp\Psr7\Response;
  */
 class PageEntity
 {
-    public function __contruct(
+    public function __construct(
         public int $count,
         public int $requestCount,
         public ?string $prevPageUrl,
