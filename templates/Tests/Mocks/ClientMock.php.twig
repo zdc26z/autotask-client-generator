@@ -23,7 +23,7 @@ class ClientMock extends Client
 
         $methods = get_class_methods($this);
         foreach($methods as $method) {
-            if("__construct" === $method || "mockResults" === $method) {
+            if("__construct" === $method || "mockResults" === $method || "mockValues" === $method) {
                 continue;
             }
             $keyName = ucfirst($method);
