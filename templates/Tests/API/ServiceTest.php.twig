@@ -1,12 +1,12 @@
 <?php
 {% if entityInformation.canQuery ~%}
 use Anteris\Autotask\API\{{ entityName.plural }}\{{ entityName.singular }}Collection;
-use Anteris\Autotask\API\{{ entityName.plural }}\{{ entityName.singular }}Entity;
 {%~ endif %}
 use Anteris\Autotask\API\{{ entityName.plural }}\{{ entityName.singular }}Service;
-{%- if entityInformation.canQuery ~%}
+use Anteris\Autotask\API\{{ entityName.plural }}\{{ entityName.singular }}Entity;
+{% if entityInformation.canQuery ~%}
 use Anteris\Autotask\API\{{ entityName.plural }}\{{ entityName.singular }}QueryBuilder;
-{%~ endif -%} 
+{%~ endif %} 
 use Tests\AbstractTest;
 
 /**
