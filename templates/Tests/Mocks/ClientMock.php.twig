@@ -19,7 +19,7 @@ class ClientMock extends Client
     public function __construct() 
     {
         $this->client = new HttpClientMock();
-        $this->faker = Faketory()::create();
+        $this->faker = Faketory::create();
 
         $methods = get_class_methods($this);
         foreach($methods as $method) {
