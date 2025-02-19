@@ -15,9 +15,9 @@ class {{ entityName.singular }}Entity extends Entity
     {% set sortedFields = fields|sort((a,b) => a.isRequired and b.isRequired ? 0 : b.isRequired) %}
     {% set firstField = sortedFields|first %}
     {% if "?" == firstField.dataType|first %}
-        {%- set ffdt = field.dataType[1:] ~ "|array|null" -%}
+        {%- set ffdt = firstField.dataType[1:] ~ "|array|null" -%}
     {% else %}
-        {%- set ffdt = field.dataType ~ "|array" -%}
+        {%- set ffdt = firstField.dataType ~ "|array" -%}
     {% endif %}
     /**
      * Creates a new {{ entityName.singular }} entity.
@@ -39,8 +39,8 @@ class {{ entityName.singular }}Entity extends Entity
         public array $userDefinedFields = [],
     )
     {
-        if(is_array({{ firstField }})) {
-            foreach({{ firstField }} as $prop => $value) {
+        if(is_array(${{ firstField.name }})) {
+            foreach(${{ firstField.name }} as $prop => $value) {
                 if(property_exists($this, $prop)) {
                     $this->$prop = $value;
                 }
