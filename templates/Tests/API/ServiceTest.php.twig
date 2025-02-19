@@ -68,4 +68,15 @@ class {{ entityName.singular }}ServiceTest extends AbstractTest
         );
     }
 {% endif %}
+
+    public function test_entity_can_be_constructed_from_array()
+    {
+        $values = $this->client->mockValues({{ entityName.singular }}Entity::class);
+
+        $entity = new {{ entityName.singular }}Entity($values);
+        foreach($values as $key => $value) {
+            $actual = $entity->{$key};
+            $this->assertEquals($value, $actual, "Value of {$key} does not equal expected.");
+        }
+    }
 }

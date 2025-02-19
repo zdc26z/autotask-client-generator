@@ -12,6 +12,13 @@ use {{ import }};
 class {{ entityName.singular }}Entity extends Entity
 {
 
+    {% set sortedFields = fields|sort((a,b) => a.isRequired and b.isRequired ? 0 : b.isRequired) %}
+    {% set firstField = sortedFields|first %}
+    {% if "?" == firstField.dataType|first %}
+        {%- set ffdt = field.dataType[1:] ~ "|array|null" -%}
+    {% else %}
+        {%- set ffdt = field.dataType ~ "|array" -%}
+    {% endif %}
     /**
      * Creates a new {{ entityName.singular }} entity.
      * If this entity has dates, they will be cast as Carbon objects.
@@ -19,15 +26,26 @@ class {{ entityName.singular }}Entity extends Entity
      * @author Aidan Casey <aidan.casey@anteris.com>
      */
     public function __construct(
-        {% for field in fields|sort((a,b) => a.isRequired and b.isRequired ? 0 : b.isRequired) %}
+        {% for field in sortedFields %}
         {% if (field.dataType == 'Carbon' or field.dataType == '?Carbon') %}#[CastCarbon]
         {% endif -%}
+        {% if loop.first %}
+        public {{ ffdt }} ${{ field.name }} = null,
+        {% else %}
         public {% if field.dataType != 'null' %}{{ field.dataType }}{% endif %} ${{ field.name }} = null,
+        {% endif %}
         {%~ endfor %}
         #[CastListToType(UserDefinedFieldEntity::class)]
         public array $userDefinedFields = [],
     )
     {
+        if(is_array({{ firstField }})) {
+            foreach({{ firstField }} as $prop => $value) {
+                if(property_exists($this, $prop)) {
+                    $this->$prop = $value;
+                }
+            }
+        }
     }
 
     /**
