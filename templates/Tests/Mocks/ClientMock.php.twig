@@ -6,7 +6,6 @@ use Anteris\Autotask\Client;
 use Anteris\Autotask\HttpClient;
 use Illuminate\Support\Collection;
 use Faker\Factory as Faketory;
-use Faker\Generator as Faker;
 use Carbon\Carbon;
 use Mockery;
 
@@ -14,12 +13,10 @@ class ClientMock extends Client
 {
     protected HttpClient $client;
     protected array $classCache = [];
-    private Faker $faker;
 
     public function __construct() 
     {
         $this->client = new HttpClientMock();
-        $this->faker = Faketory::create();
 
         $methods = get_class_methods($this);
         foreach($methods as $method) {
@@ -73,8 +70,9 @@ class ClientMock extends Client
         }
     }
 
-    public function mockValues(string $entity)
+    public static function mockValues(string $entity)
     {
+        $faker = Faketory::create();
         $reflection = new \ReflectionClass($entity);
         $properties = $reflection->getProperties();
         $result = array();
@@ -100,28 +98,28 @@ class ClientMock extends Client
                     ], '', $type);
                 }
 
-                if($required || $this->faker->boolean()) {
+                if($required || $faker->boolean()) {
                     switch($type) {
                         case 'bool':
-                            $result[$property->name] = $this->faker->boolean();
+                            $result[$property->name] = $faker->boolean();
                             break;
                         case 'int':
-                            $result[$property->name] = $this->faker->randomNumber();
+                            $result[$property->name] = $faker->randomNumber();
                             break;
                         case 'array':
                             $result[$property->name] = [];
                             break;
                         case 'float':
-                            $result[$property->name] = $this->faker->randomFloat();
+                            $result[$property->name] = $faker->randomFloat();
                             break;
                         case 'Carbon\Carbon':
-                            $result[$property->name] = new Carbon($this->faker->dateTime());
+                            $result[$property->name] = new Carbon($faker->dateTime());
                             break;
                         default:
                         var_dump($type);
                         case 'mixed':
                         case 'string':
-                            $result[$property->name] = $this->faker->word();
+                            $result[$property->name] = $faker->word();
                             break;
                     }
                 }
@@ -136,7 +134,7 @@ class ClientMock extends Client
         $entity = $namespace .$singular . 'Entity';
         $collection = $namespace . $singular . 'Collection';
         $results = [];
-        $count = $this->faker->numberBetween(1, 10);
+        $count = rand(1, 10);
 
         for($i=0; $i<$count; $i++) {
             $result = $this->mockValues($entity);

@@ -8,6 +8,7 @@ use Anteris\Autotask\API\{{ entityName.plural }}\{{ entityName.singular }}Entity
 use Anteris\Autotask\API\{{ entityName.plural }}\{{ entityName.singular }}QueryBuilder;
 {%~ endif %} 
 use Tests\AbstractTest;
+use Tests\Mocks\ClientMock;
 
 /**
  * Runs tests for {{ entityName.singular }}Service.
@@ -71,7 +72,7 @@ class {{ entityName.singular }}ServiceTest extends AbstractTest
 
     public function test_entity_can_be_constructed_from_array()
     {
-        $values = $this->client->mockValues({{ entityName.singular }}Entity::class);
+        $values = ClientMock::mockValues({{ entityName.singular }}Entity::class);
 
         $entity = new {{ entityName.singular }}Entity($values);
         foreach($values as $key => $value) {
