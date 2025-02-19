@@ -6,6 +6,7 @@ use Anteris\Autotask\Client;
 use Anteris\Autotask\HttpClient;
 use Illuminate\Support\Collection;
 use Faker\Factory as Faketory;
+use Faker\Generator as Faker;
 use Carbon\Carbon;
 use Mockery;
 
@@ -13,10 +14,12 @@ class ClientMock extends Client
 {
     protected HttpClient $client;
     protected array $classCache = [];
+    private Faker $faker;
 
     public function __construct() 
     {
         $this->client = new HttpClientMock();
+        $this->faker = Faketory()::create();
 
         $methods = get_class_methods($this);
         foreach($methods as $method) {
@@ -70,9 +73,8 @@ class ClientMock extends Client
         }
     }
 
-    public static function mockValues(string $entity)
+    public static function mockValues(Faker $faker, string $entity)
     {
-        $faker = Faketory::create();
         $reflection = new \ReflectionClass($entity);
         $properties = $reflection->getProperties();
         $result = array();
@@ -137,7 +139,7 @@ class ClientMock extends Client
         $count = rand(1, 10);
 
         for($i=0; $i<$count; $i++) {
-            $result = $this->mockValues($entity);
+            $result = $this->mockValues($this->faker, $entity);
 
             $results[$i] = new $entity(...$result);
         }

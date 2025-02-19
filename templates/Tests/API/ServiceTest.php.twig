@@ -9,6 +9,7 @@ use Anteris\Autotask\API\{{ entityName.plural }}\{{ entityName.singular }}QueryB
 {%~ endif %} 
 use Tests\AbstractTest;
 use Tests\Mocks\ClientMock;
+use Faker\Factory as Faker;
 
 /**
  * Runs tests for {{ entityName.singular }}Service.
@@ -72,7 +73,7 @@ class {{ entityName.singular }}ServiceTest extends AbstractTest
 
     public function test_entity_can_be_constructed_from_array()
     {
-        $values = ClientMock::mockValues({{ entityName.singular }}Entity::class);
+        $values = ClientMock::mockValues(Faker::create(), {{ entityName.singular }}Entity::class);
 
         $entity = new {{ entityName.singular }}Entity($values);
         foreach($values as $key => $value) {
